@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RestController2 {
+public class Service2Controller {
 
     @GetMapping
     public String hello2() {
