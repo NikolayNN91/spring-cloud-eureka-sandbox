@@ -1,0 +1,44 @@
+services:
+  discovery:
+    image: discovery
+    container_name: discovery
+    ports:
+      - 8761:8761
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
+  nrservice:
+    image: nrservice
+    container_name: nrservice
+    depends_on:
+      - discovery
+    ports:
+      - 8081:8081
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
+  service1:
+    image: service1
+    container_name: service1
+    depends_on:
+      - discovery
+    ports:
+      - 40000:40000
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
+  service1_02:
+    image: service1
+    container_name: service1_02
+    depends_on:
+      - discovery
+    ports:
+      - 40001:40000
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
+  service2:
+    image: service2
+    container_name: service2
+    depends_on:
+      - discovery
+    ports:
+      - 48080:48080
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8761/eureka/
