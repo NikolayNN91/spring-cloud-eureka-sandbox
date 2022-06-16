@@ -3,7 +3,7 @@ package eureka.client.com.controller;
 import com.netflix.discovery.EurekaClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,21 +21,21 @@ public class Service1Controller {
     @Lazy
     private EurekaClient eurekaClient;
 
+    @Autowired
+    private EurekaInstanceConfigBean configBean;
+
     @Value("${spring.application.name}")
     private String appName;
 
-    @Autowired
-    private ServletWebServerApplicationContext webServerAppCtxt;
-
     @GetMapping("/hello1")
-    public String hello1() throws InterruptedException {
-        Thread.sleep(1000);
-        return "Some bullshit " + eurekaClient.getApplication(appName).toString() + " port=" + webServerAppCtxt.getWebServer().getPort();
+    public String hello1() {
+        return "Some bullshit " + eurekaClient.getApplication(appName).toString()
+                + " instanceId=" + configBean.getInstanceId();
     }
 
     @PostMapping(value = "/hello1ForRT", consumes = MediaType.TEXT_PLAIN, produces = MediaType.TEXT_PLAIN)
     public @ResponseBody
     String hello1RT(@RequestBody String str, HttpServletRequest request) {
-        return "Some bullshit for RT client=" + request.getRemotePort() + " port=" + webServerAppCtxt.getWebServer().getPort();
+        return "Some bullshit for RT client=" + request.getRemotePort() + " instanceId=" + configBean.getInstanceId();
     }
 }
